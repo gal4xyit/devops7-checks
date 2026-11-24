@@ -1,0 +1,18 @@
+Paused=true
+CHECK_TIMEOUT = 5 с
+TIMEOUT — http://127.0.0.1:8080/ не відповів за 5 с
+Тривалість скрипту = 5.024 с
+Код скрипту = 2
+F.....                                                                   [100%]
+=================================== FAILURES ===================================
+E   TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+E   urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='127.0.0.1', port=8080): Read timed out. (read timeout=5.0)
+
+During handling of the above exception, another exception occurred:
+E   requests.exceptions.ReadTimeout: HTTPConnectionPool(host='127.0.0.1', port=8080): Read timed out. (read timeout=5.0)
+/home/alexander/devops7-checks/.venv/lib/python3.14/site-packages/requests/adapters.py:742: requests.exceptions.ReadTimeout: HTTPConnectionPool(host='127.0.0.1', port=8080): Read timed out. (read timeout=5.0)
+=========================== short test summary info ============================
+FAILED tests/http/test_endpoints.py::test_health_json - requests.exceptions.R...
+1 failed, 5 passed in 5.03s

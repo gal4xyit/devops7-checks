@@ -1,0 +1,9 @@
+<h1>devops7-gal4xyit</h1>
+GET / -> HTTP 200
+{"status":"ok","release":"devops7-gal4xyit"}
+GET /health.json -> HTTP 200
+..............                                                           [100%]
+14 passed in 0.75s
+Код pytest = 0
+OK — http://127.0.0.1:8080/ містить devops7-gal4xyit
+Код скрипту = 0

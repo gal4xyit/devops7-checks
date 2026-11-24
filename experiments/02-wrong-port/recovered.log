@@ -1,0 +1,9 @@
+BASE_URL = http://127.0.0.1:8080
+Docker 80/tcp -> 127.0.0.1:8080
+{"status":"ok","release":"devops7-gal4xyit"}
+GET http://127.0.0.1:8080/health.json -> HTTP 200
+..............                                                           [100%]
+14 passed in 0.53s
+Код pytest = 0
+OK — http://127.0.0.1:8080/ містить devops7-gal4xyit
+Код скрипту = 0

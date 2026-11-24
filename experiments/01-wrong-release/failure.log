@@ -1,0 +1,19 @@
+<h1>wrong-release</h1>
+GET / -> HTTP 200
+{"status":"ok","release":"devops7-gal4xyit"}
+GET /health.json -> HTTP 200
+...F....F.....                                                           [100%]
+=================================== FAILURES ===================================
+E   AssertionError: assert 'devops7-gal4xyit' in '<h1>wrong-release</h1>\n'
+     +  where '<h1>wrong-release</h1>\n' = <Response [200]>.text
+/home/alexander/devops7-checks/tests/http/test_endpoints.py:15: AssertionError: assert 'devops7-gal4xyit' in '<h1>wrong-release</h1>\n'
+E   AssertionError: assert 'devops7-gal4xyit' in '<h1>wrong-release</h1>\n'
+     +  where '<h1>wrong-release</h1>\n' = <file /usr/share/nginx/html/index.html>.content_string
+/home/alexander/devops7-checks/tests/infra/test_server.py:16: AssertionError: assert 'devops7-gal4xyit' in '<h1>wrong-release</h1>\n'
+=========================== short test summary info ============================
+FAILED tests/http/test_endpoints.py::test_home_page_release - AssertionError:...
+FAILED tests/infra/test_server.py::test_release_content[docker://devops7-app]
+2 failed, 12 passed in 0.54s
+Код pytest = 1
+FAIL — очікуваний реліз devops7-gal4xyit відсутній
+Код скрипту = 1

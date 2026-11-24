@@ -1,0 +1,77 @@
+name: DevOps 7 service checks
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      BASE_URL: http://127.0.0.1:8080
+      EXPECTED_RELEASE: devops7-gal4xyit
+      CHECK_TIMEOUT: "5"
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version-file: .python-version
+
+      - name: Встановити залежності
+        run: python -m pip install -r requirements.txt
+
+      - name: Зібрати образ
+        run: docker build -t devops7-app .
+
+      - name: Запустити контейнер
+        run: docker run -d --name devops7-app -p 127.0.0.1:8080:80 devops7-app
+
+      - name: Дочекатися HTTP-відповіді
+        id: ready
+        run: >-
+          timeout 30s curl -fsS --max-time 2
+          --retry 30 --retry-delay 1 --retry-all-errors
+          "$BASE_URL/health.json"
+
+      - name: Тести pytest
+        run: |
+          mkdir -p reports
+          python -m pytest -v --tb=short --hosts=docker://devops7-app --junitxml=reports/pytest.xml tests
+
+      - name: Перевірити реліз
+        if: ${{ !cancelled() && steps.ready.outcome == 'success' }}
+        run: python scripts/check_service.py
+
+      - name: Готовність підтверджено
+        if: success()
+        run: echo "Усі перевірки пройдено"
+
+      - name: Зібрати журнал контейнера
+        if: always()
+        run: |
+          mkdir -p reports
+          if docker container inspect devops7-app >/dev/null 2>&1; then
+            docker logs devops7-app > reports/container.log 2>&1
+          else
+            echo "Контейнер не створено" > reports/runner-note.txt
+          fi
+
+      - name: Зберегти звіт і журнал
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: devops7-reports
+          path: reports/
+
+      - name: Видалити контейнер
+        if: always()
+        run: |
+          if docker container inspect devops7-app >/dev/null 2>&1; then
+            docker rm -f devops7-app
+          fi
